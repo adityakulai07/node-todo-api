@@ -38,6 +38,7 @@ var UserSchema = new mongoose.Schema({
 
 });
 
+//below 2 methods are instance methods
 UserSchema.methods.toJSON = function(){
   var user = this;
   var userObject = user.toObject();
@@ -54,6 +55,29 @@ UserSchema.methods.generateAuthToken = function(){
 
   return user.save().then(() => {
     return token;
+  });
+};
+
+//defining findByToken method
+//below method is model method, check user has
+//uppercase U
+UserSchema.statics.findByToken = function(token){
+  var User = this;
+  var decoded;
+
+  try{
+    decoded = jwt.verify(token, 'secretmsg');
+  } catch(e){
+    // return new Promise((resolve,reject) => {
+    //   reject();
+    // });
+    return Promise.reject();
+  }
+
+  return User.findOne({
+    '_id' : decoded._id,
+    'tokens.token' : token,
+    'tokens.access' : 'auth'
   });
 };
 
