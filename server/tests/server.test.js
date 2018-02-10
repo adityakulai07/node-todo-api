@@ -289,7 +289,7 @@ describe('POST /todos' , () => {
         })
         .end((err, res) => {
           if (err) {
-            return done(err)
+            return done(err);
           }
 
           User.findById(users[1]._id).then((user) => {
@@ -297,5 +297,25 @@ describe('POST /todos' , () => {
             done();
         }).catch((e) => done(e));
     });
+    });
+  });
+
+  describe('DELETE /users/me/token' , () => {
+    it('should remove auth token on logout', (done) => {
+      request(app)
+        .delete('/users/me/token')
+        .set('x-auth', users[0].tokens[0].token)
+        .expect(200)
+        .end((err, res) => {
+          //Handle the error
+          if (err) {
+            return done(err);
+          }
+          //Query the database
+          User.findById(users[0]._id).then((user) => {
+            expect(user.tokens.length).toBe(0);
+            done();
+          }).catch((e) => done(e));
+        });
     });
   });
