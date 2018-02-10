@@ -6,7 +6,9 @@ const jwt = require('jsonwebtoken');
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
 
-const users = [{
+const users = [
+  {
+    //First user for test
   _id : userOneId,
   email : 'adityakulai@example.com',
   password : 'userOnePass',
@@ -15,6 +17,7 @@ const users = [{
     token : jwt.sign({_id : userOneId , access: 'auth'}, 'secretmsg').toString()
   }]
 }, {
+    //Second user for test
     _id : userTwoId,
     email : 'anu@baby.com',
     password : 'userTwoPass'
